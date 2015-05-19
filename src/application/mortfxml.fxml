@@ -25,6 +25,5 @@
       <TextField fx:id="downPaymentBox" layoutX="171.0" layoutY="177.0" onAction="#handlemonthyDebtBox" />
       <TextField fx:id="maxPaymentBox" layoutX="171.0" layoutY="286.0" />
       <TextField fx:id="mortgageAmountBox" layoutX="171.0" layoutY="318.0" />
-      <ChoiceBox fx:id="myBox" layoutX="13.0" layoutY="373.0" prefWidth="150.0" />
    </children>
 </AnchorPane>

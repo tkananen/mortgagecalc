@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import java.math.*;
 
 public class mortController extends Main{
 
@@ -38,40 +39,24 @@ public class mortController extends Main{
 	@FXML
 	private TextField mortgageAmountBox;
 	
-	
 
-	
-	@FXML
-	private ChoiceBox myBox = new ChoiceBox(FXCollections.observableArrayList("0", "5", "10", "15"));
-	
-	
-
-	
-	
 	private Main main;
-	
-	
-	
+
 
 	@FXML
-	private void intialize(){
+	private void initialize(){
 		
 	
 	term.getItems().addAll(
 			"5",
 			"10",
 			"15");
-	term.setValue("0");
 	
-	
-	term.getButtonCell().setText("5");
-	
-	myBox.getItems().addAll("5", "10");
+	downPaymentBox.setText("0");
 	
 	}
 	
-	
-	
+
 	@FXML
 	public void handlegrossIncome(){
 	
@@ -87,6 +72,8 @@ public class mortController extends Main{
 			hpObligationsBox.setText(""); 
 			maxPaymentBox.setText("" + newHousing);
 		}
+		
+		
 		int temptotalPayment = Integer.parseInt(monthlyDebtBox.getText().toString());
 		double totalPay =  ((temphousingPayment /12) * (.36)) - temptotalPayment;
 
@@ -140,7 +127,7 @@ public class mortController extends Main{
 	@FXML
 	public void handleinterestRateBox(){
 
-		int temphousingPayment = Integer.parseInt(grossIncomeBox.getText());
+		int temphousingPayment = Integer.parseInt(grossIncomeBox.getText().toString());
 		double newHousing = (temphousingPayment /12) * (.18);
 		
 		housingPaymentBox.setText(""+newHousing);
@@ -148,17 +135,19 @@ public class mortController extends Main{
 		
 		
 		
-		int temptotalPayment = Integer.parseInt(monthlyDebtBox.getText());
-		double totalPay =  ((temphousingPayment /12) * (.36)) - temptotalPayment;
+		int temptotalPayment = Integer.parseInt(monthlyDebtBox.getText().toString());
+		double totalPay =  (((temphousingPayment /12) * (.36)) - temptotalPayment);
 
 		
 		hpObligationsBox.setText(""+totalPay);
 		
 		if(newHousing > totalPay){
+			maxPaymentBox.clear();
 			maxPaymentBox.setText(""+totalPay);
 			
 		}
-		else{
+		if(totalPay > newHousing){
+			maxPaymentBox.clear();
 			maxPaymentBox.setText(""+newHousing);
 		}
 		
@@ -175,28 +164,46 @@ public class mortController extends Main{
 		
 
 		
-		int temptotalPayment1 = Integer.parseInt(monthlyDebtBox.getText());
-		double totalPay1 =  ((temphousingPayment /12) * (.36)) - temptotalPayment1;
+		int temptotalPayment = Integer.parseInt(monthlyDebtBox.getText());
+		double totalPay =  ((temphousingPayment /12) * (.36)) - temptotalPayment;
 		
 		
-		hpObligationsBox.setText(""+totalPay1);
+		hpObligationsBox.setText(""+totalPay);
 		
 		
-		double intRateTemp = Integer.parseInt(interestRateBox.getSelectedText());
-		double intRate = intRateTemp / 100;
-		double mortTerm = Integer.parseInt(term.getValue());
 		
 		
-		if(newHousing > totalPay1){
-			maxPaymentBox.setText(""+totalPay1);
-			double mortgageFinanced = (totalPay1*((1/intRate)-(1/(intRate*Math.pow(1+intRate, mortTerm)))));
-			mortgageAmountBox.setText("" + mortgageFinanced);
+		int intRateTemp = Integer.parseInt(interestRateBox.getText());
+		double intRate = 1.0 * (intRateTemp/100);
+		double intRatePlusOne = 1 +intRate;
+		int mortTermTemp = Integer.parseInt(term.getValue());
+		double mortTerm = 1.0 * mortTermTemp;	
+		
+		if(newHousing > totalPay){
+			maxPaymentBox.clear();
+			maxPaymentBox.setText(""+totalPay);
 			
 		}
 		else{
+			maxPaymentBox.clear();
 			maxPaymentBox.setText(""+newHousing);
-			double mortgageFinanced = (newHousing*((1/intRate)-(1/(intRate*Math.pow(1+intRate, mortTerm)))));
-			mortgageAmountBox.setText(""+mortgageFinanced);
+		}
+		
+		
+		if(newHousing > totalPay){
+			
+		
+			
+			double PV = totalPay * ((1-(1/Math.pow(intRatePlusOne, mortTerm)))/intRate);
+			mortgageAmountBox.setText("" + PV);
+
+			
+		}
+		if(totalPay > newHousing){
+			
+			
+			double PV = newHousing * ((1-(1/Math.pow(intRatePlusOne, mortTerm)))/intRate);
+			mortgageAmountBox.setText("" + PV); 
 		}
 		
 
