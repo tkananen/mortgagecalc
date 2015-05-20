@@ -1,12 +1,18 @@
 package application;
 
 import javafx.collections.FXCollections;
+
+
+
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+
 import java.math.*;
+
+import org.apache.poi.ss.formula.functions.FinanceLib;
 
 public class mortController extends Main{
 
@@ -192,17 +198,18 @@ public class mortController extends Main{
 		
 		if(newHousing > totalPay){
 			
+
 		
-			
-			double PV = totalPay * ((1-(1/Math.pow(intRatePlusOne, mortTerm)))/intRate);
+			double PV = FinanceLib.pv(intRate, mortTerm, totalPay, 0, true);
+			//double PV = totalPay * ((1-(1/Math.pow(intRatePlusOne, mortTerm)))/intRate);
 			mortgageAmountBox.setText("" + PV);
 
 			
 		}
 		if(totalPay > newHousing){
 			
-			
-			double PV = newHousing * ((1-(1/Math.pow(intRatePlusOne, mortTerm)))/intRate);
+			double PV = FinanceLib.pv(intRate, mortTerm, newHousing, 0, true);
+			// double PV = newHousing * ((1-(1/Math.pow(intRatePlusOne, mortTerm)))/intRate);
 			mortgageAmountBox.setText("" + PV); 
 		}
 		
